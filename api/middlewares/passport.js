@@ -25,7 +25,9 @@ const bcrypt = require('bcrypt')
           .catch(err => cb(err));
     }
 ));*/
-
+module.exports = (app) => {
+    app.use(passport.initialize());
+    app.use(passport.session());
 const localOpts = {
     usernameField: 'username',
 };
@@ -42,6 +44,7 @@ const localStrategy = new LocalStrategy(localOpts, async (username, password, do
            // console.log("Sai o duoi nay: "+bcrypt.compareSync(password,user.password))
             return done(null, false);
         }
+        require.user = user
         return done(null, user);
     } catch (e) {
         return done(e, false);
@@ -50,11 +53,11 @@ const localStrategy = new LocalStrategy(localOpts, async (username, password, do
 passport.use(localStrategy);
 
 passport.serializeUser((user, done) => {
-    done(null, user);
+    return done(null, user);
 });
 
 passport.deserializeUser((user, done) => {
-    done(null, user);
+    return done(null, user);
 });
 
 passport.use(new JWTStrategy({
@@ -64,7 +67,7 @@ passport.use(new JWTStrategy({
 function (jwtPayload, cb) {
 
     //find the user in db if needed. This functionality may be omitted if you store everything you'll need in JWT payload.
-    return UserModel.findOne(jwtPayload.username)
+    return UserModel.findOneById(jwtPayload.id)
         .then(user => {
             return cb(null, user);
         })
@@ -73,3 +76,4 @@ function (jwtPayload, cb) {
         });
 }
 ));
+}

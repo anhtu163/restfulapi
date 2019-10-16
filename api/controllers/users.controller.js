@@ -1,6 +1,7 @@
 const User = require('../models/user.model');
 const  jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt')
+const passport = require('../middlewares/passport')
 
 module.exports = {
     indexUser: (req,res,next)=>{
@@ -34,7 +35,7 @@ module.exports = {
     },
 
     getInforUser: (req, res, next) => {
-        console.log(req.user)
+        console.log(req.user || "Méo có user")
         res.status(200).json(req.user);
         //res.send(req.user);
     },

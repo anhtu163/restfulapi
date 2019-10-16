@@ -3,7 +3,7 @@ const passport = require('passport');
 
 module.exports = {
     authLogin : (req, res, next) => {
-        passport.authenticate('local', {session: false}, (err, user, info) => {
+        passport.authenticate('local', (err, user, info) => {
             if (err) {
                 return next(err); 
             }
@@ -13,7 +13,7 @@ module.exports = {
                     user   : user
                 });
             }
-           req.logIn(user, {session: false}, (err) => {
+           req.logIn(user, (err) => {
                if (err) {
                    res.send(err);
                }
