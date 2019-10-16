@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
+const bcrypt = require('bcrypt')
 
 const userSchema = new Schema({
     username:{
@@ -20,6 +21,21 @@ const userSchema = new Schema({
     }
 
 });
+/*userSchema.methods = {
+    hashPassword(password) {
+        return bcrypt.hashSync(password,'huynhanh');
+    },
+    authenticateUser(password) {
+        return bcrypt.compareSync(password, this.password);
+    },
+};*/
+/*userSchema.pre('save', function(next) {
+    if (this.isModified('password')) {
+        this.password = bcrypt.hash(this.password,'huynhanh');
+    }
+    return next();
+});*/
+
 
 const User = mongoose.model('user', userSchema);
 

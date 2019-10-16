@@ -3,13 +3,19 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const logger = require('morgan');
 const db = require('./api/utils/db')
+const passport    = require('passport');
+const jwt = require('jsonwebtoken')
 //Import routes
 const userRoute = require('./api/routes/users.route');
 
+require('./api/middlewares/passport');
+
+const authRoute = require('./api/routes/auth.route')
 
 const app = express();
 
 // Middlewares
+
 
 app.use(logger('dev'))
 
@@ -18,7 +24,7 @@ app.use(bodyParser.json());
 
 app.use('/user',userRoute);
 
-
+app.use('/auth',authRoute);
 // Routes
 
 app.get('/',(req,res,next)=>{

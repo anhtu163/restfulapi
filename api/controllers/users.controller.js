@@ -1,4 +1,6 @@
 const User = require('../models/user.model');
+const  jwt = require('jsonwebtoken');
+const bcrypt = require('bcrypt')
 
 module.exports = {
     indexUser: (req,res,next)=>{
@@ -13,14 +15,27 @@ module.exports = {
     },
 
     newUser: (req,res,next)=>{
-        const newUser = new User(req.body);
+        const newUser = new User({
+            username: req.body.username,
+            password: bcrypt.hashSync(req.body.password,10),
+            name: req.body.name,
+            phone: req.body.phone
+        });
         newUser.save()
         .then(user => {
             console.log(user);
-           // res.status(201).json(user);
+
+           //const token = jwt.sign(user,'huynhanh'); 
+           res.status(201).json(user);
         })
         .catch(err =>{
             next(err);
         })
+    },
+
+    getInforUser: (req, res, next) => {
+        console.log(req.user)
+        res.status(200).json(req.user);
+        //res.send(req.user);
     },
 }
