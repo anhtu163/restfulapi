@@ -24,7 +24,7 @@ module.exports = {
                    name: user.name,
                    phone: user.phone
                }, 'huynhanh');
-               return res.json(token);
+               return res.status(200).json(token);
             });
         })(req, res,next);
     }
