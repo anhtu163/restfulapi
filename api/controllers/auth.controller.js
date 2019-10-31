@@ -3,7 +3,7 @@ const passport = require('passport');
 
 module.exports = {
     authLogin : (req, res, next) => {
-        passport.authenticate('local', (err, user, info) => {
+        passport.authenticate('local',{session: false}, (err, user, info) => {
             if (err) {
                 return next(err); 
             }
@@ -13,18 +13,15 @@ module.exports = {
                     user   : user
                 });
             }
-           req.logIn(user, (err) => {
+           req.logIn(user,{session: false}, (err) => {
                if (err) {
                    res.send(err);
                }
                // generate a signed son web token with the contents of user object and return it in the response
                const token = jwt.sign({
                    username: user.username,
-                   password: user.password,
-                   name: user.name,
-                   phone: user.phone
                }, 'huynhanh');
-               return res.status(200).json(token);
+               return res.status(200).json({token,user});
             });
         })(req, res,next);
     }

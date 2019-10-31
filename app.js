@@ -5,6 +5,7 @@ const logger = require('morgan');
 const db = require('./api/utils/db')
 const passport    = require('passport');
 const jwt = require('jsonwebtoken')
+const cors = require('cors')
 //Import routes
 const userRoute = require('./api/routes/users.route');
 
@@ -14,14 +15,14 @@ const authRoute = require('./api/routes/auth.route')
 
 const app = express();
 
-var allowCrossDomain = function(req, res, next) {
-    res.header('Access-Control-Allow-Origin', "*");
-    res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
-    res.header('Access-Control-Allow-Headers', 'Content-Type');
-    next();
-}
+// var allowCrossDomain = function(req, res, next) {
+//     res.header('Access-Control-Allow-Origin', "*");
+//     res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
+//     res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+//     next();
+// }
 
-app.use(allowCrossDomain);
+app.use(cors());
 
 // Middlewares
 require('./api/middlewares/session')(app)
@@ -51,7 +52,7 @@ app.get('/',(req,res,next)=>{
         message: "You are in homepage"
     });
 })
-app.get('/me',(req,res)=>{
+app.get('/me',passport.authenticate('jwt',{session: false}),(req,res)=>{
     console.log(req.user)
     res.status(200).json(
         req.user

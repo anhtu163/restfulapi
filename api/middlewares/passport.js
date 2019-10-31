@@ -1,30 +1,12 @@
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
-
+const FacebookStrategy = require('passport-facebook').Strategy;
 const passportJWT = require("passport-jwt");
 const JWTStrategy   = passportJWT.Strategy;
 const ExtractJWT = passportJWT.ExtractJwt;
 const UserModel = require('../models/user.model')
 const bcrypt = require('bcrypt')
 
-/*passport.use(new LocalStrategy({
-        usernameField: 'username',
-        passwordField: 'password'
-    }, 
-    function (username, password, cb) {
-        //this one is typically a DB call. Assume that the returned user object is pre-formatted and ready for storing in JWT
-
-        
-        return UserModel.findOne({username, password})
-           .then(user => {
-               if (!user) {
-                   return cb(null, false, {message: 'Incorrect email or password.'});
-               }
-               return cb(null, user, {message: 'Logged In Successfully'});
-          })
-          .catch(err => cb(err));
-    }
-));*/
 module.exports = (app) => {
     app.use(passport.initialize());
     app.use(passport.session());
@@ -52,6 +34,19 @@ const localStrategy = new LocalStrategy(localOpts, async (username, password, do
 });
 passport.use(localStrategy);
 
+// passport.use(new FacebookStrategy({
+//     clientID: "385118689034200",
+//     clientSecret: "huynhanh",
+//     callbackURL: ""
+// },
+//     function(accessToken, refreshToken, profile,done){
+//         UserModel.findOrCreate(...UserModel,function(err,user){
+//             if(err) {return done(err);}
+//             done(null,user)
+//         })
+//     }
+// ))
+
 passport.serializeUser((user, done) => {
     return done(null, user);
 });
@@ -67,7 +62,7 @@ passport.use(new JWTStrategy({
 function (jwtPayload, cb) {
 
     //find the user in db if needed. This functionality may be omitted if you store everything you'll need in JWT payload.
-    return UserModel.findOneById(jwtPayload.id)
+    return UserModel.findOne(jwtPayload._id)
         .then(user => {
             return cb(null, user);
         })

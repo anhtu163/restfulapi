@@ -34,9 +34,26 @@ module.exports = {
         })
     },
 
+    updateUser: (req,res,next)=>{
+        
+        console.log(req.body)
+
+
+        User.findOne({"username": req.body.username},(err,user)=>{
+            if(!user){
+                next(err)
+            }
+            user.name = req.body.name;
+            user.phone = req.body.phone;
+            user.save();
+        })
+
+        User.findOne({"username": req.body.username},(err,user)=>{
+            console.log(user)
+        })
+    },
+
     getInforUser: (req, res, next) => {
-        console.log(req.user || "Méo có user")
         res.status(200).json(req.user);
-        //res.send(req.user);
     },
 }
