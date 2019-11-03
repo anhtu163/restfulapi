@@ -36,8 +36,6 @@ module.exports = {
 
     updateUser: (req,res,next)=>{
         
-        console.log(req.body)
-
 
         User.findOne({"username": req.body.username},(err,user)=>{
             if(!user){
@@ -51,6 +49,10 @@ module.exports = {
         User.findOne({"username": req.body.username},(err,user)=>{
             console.log(user)
         })
+    },
+
+    changePassUser: (req,res,next) =>{
+        console.log(req.body)
     },
 
     getInforUser: (req, res, next) => {

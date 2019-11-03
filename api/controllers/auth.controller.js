@@ -20,6 +20,8 @@ module.exports = {
                // generate a signed son web token with the contents of user object and return it in the response
                const token = jwt.sign({
                    username: user.username,
+                   name: user.name,
+                   phone: user.phone
                }, 'huynhanh');
                return res.status(200).json({token,user});
             });
