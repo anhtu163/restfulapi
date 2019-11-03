@@ -45,14 +45,18 @@ module.exports = {
             user.phone = req.body.phone;
             user.save();
         })
-
-        User.findOne({"username": req.body.username},(err,user)=>{
-            console.log(user)
-        })
     },
 
     changePassUser: (req,res,next) =>{
-        console.log(req.body)
+        User.findOne({"username":req.body.username},(err,user)=>{
+            if(!user){
+                next(err)
+            }else if (! bcrypt.compareSync(req.body.password,user.password)) { 
+                next(err)
+            }
+            user.password = bcrypt.hashSync(req.body.newpassword,10),
+            user.save()
+        })
     },
 
     getInforUser: (req, res, next) => {
