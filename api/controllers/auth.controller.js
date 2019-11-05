@@ -21,7 +21,8 @@ module.exports = {
                const token = jwt.sign({
                    username: user.username,
                    name: user.name,
-                   phone: user.phone
+                   phone: user.phone,
+                   image: user.image,
                }, 'huynhanh');
                return res.status(200).json({token,user});
             });
